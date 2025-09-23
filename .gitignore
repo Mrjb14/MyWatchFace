@@ -1,0 +1,20 @@
+# Ignore build output
+bin/
+# Ignore generated files
+*.mcgen
+*.mir
+*.mbc
+
+# Ignore IDE/project files (if any)
+*.iml
+.idea/
+.vscode/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore logs
+*.log
+
+# ...add other patterns as needed for your environment
