@@ -4,10 +4,7 @@ import Toybox.System;
 import Toybox.WatchUi;
 
 class MyWatchFaceView extends WatchUi.WatchFace {
-    
-    var centerX = 242;
-    var centerY = 227;
-    var radiusG = 50;
+    var radiusG = 150;
     var radiusH = 52;
     var teta = 0.0;
 
@@ -29,26 +26,14 @@ class MyWatchFaceView extends WatchUi.WatchFace {
     // Update the view
     function onUpdate(dc as Dc) as Void {
         // Get and show the current time
+        var centerX =  dc.getWidth()/2;
+        var centerY =  dc.getHeight()/2;
         
         var clockTime = System.getClockTime();
         var timeString = Lang.format("$1$:$2$", [clockTime.hour, clockTime.min.format("%02d")]);
         var view = View.findDrawableById("TimeLabel") as Text;
         var second = Lang.format("$1$", [clockTime.sec]);
-        dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_BLACK);
-        for (var i = 0; i < second.toNumber() ; i = i + 1) {
-            // var charView = View.findDrawableById("SecondChar") as Text;
-            // charView.setText(second);
-            // charView.setColor(Graphics.COLOR_BLUE);
-            teta = (3.14 / 60) * i;
-            var x1 = centerX + (radiusG * Math.sin(teta));
-            var y1 = centerY - (radiusG * Math.cos(teta));
-            var x2 = centerX + (radiusH * Math.sin(teta));
-            var y2 = centerY - (radiusH * Math.cos(teta));
-
-            //dc.drawLine(x1.toNumber(), y1.toNumber(), x2.toNumber(), y2.toNumber());
-            dc.drawCircle(x1.toNumber(), y1.toNumber(), 10);
-            System.println(second + " " + x1 + " " + y1 + " " + x2 + " " + y2);
-        }
+        
         dc.drawLine(10, 50, 10 + second.toNumber() , 55);
         var screenWidth = dc.getWidth();
         var screenHeight = dc.getHeight();
@@ -58,6 +43,22 @@ class MyWatchFaceView extends WatchUi.WatchFace {
         view.setColor(Graphics.COLOR_RED);
         // Call the parent onUpdate function to redraw the layout
         View.onUpdate(dc);
+
+        for (var i = 0; i < second.toNumber() ; i = i + 1) {
+            // var charView = View.findDrawableById("SecondChar") as Text;
+            // charView.setText(second);
+            // charView.setColor(Graphics.COLOR_BLUE);
+            teta = (2 * Math.PI / 60) * i;
+            var x1 = centerX + (radiusG * Math.sin(teta));
+            var y1 = centerY - (radiusG * Math.cos(teta));
+            var x2 = centerX + (radiusH * Math.sin(teta));
+            var y2 = centerY - (radiusH * Math.cos(teta));
+
+            dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_BLACK);
+            //dc.drawLine(x1.toNumber(), y1.toNumber(), x2.toNumber(), y2.toNumber());
+            dc.drawCircle(x1.toNumber(), y1.toNumber(), 3);
+            System.println(second + " " + x1 + " " + y1 + " " + x2 + " " + y2);
+        }
     }
 
     // Called when this View is removed from the screen. Save the
