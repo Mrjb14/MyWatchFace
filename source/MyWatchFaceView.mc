@@ -4,6 +4,12 @@ import Toybox.System;
 import Toybox.WatchUi;
 
 class MyWatchFaceView extends WatchUi.WatchFace {
+    
+    var centerX = 242;
+    var centerY = 227;
+    var radiusG = 50;
+    var radiusH = 52;
+    var teta = 0.0;
 
     function initialize() {
         WatchFace.initialize();
@@ -28,11 +34,26 @@ class MyWatchFaceView extends WatchUi.WatchFace {
         var timeString = Lang.format("$1$:$2$", [clockTime.hour, clockTime.min.format("%02d")]);
         var view = View.findDrawableById("TimeLabel") as Text;
         var second = Lang.format("$1$", [clockTime.sec]);
-        for (var i = 0; i < second.length(); i = i + 1) {
-            var charView = View.findDrawableById("SecondChar") as Text;
-            charView.setText(second);
-            charView.setColor(Graphics.COLOR_BLUE);
+        dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_BLACK);
+        for (var i = 0; i < second.toNumber() ; i = i + 1) {
+            // var charView = View.findDrawableById("SecondChar") as Text;
+            // charView.setText(second);
+            // charView.setColor(Graphics.COLOR_BLUE);
+            teta = (3.14 / 60) * i;
+            var x1 = centerX + (radiusG * Math.sin(teta));
+            var y1 = centerY - (radiusG * Math.cos(teta));
+            var x2 = centerX + (radiusH * Math.sin(teta));
+            var y2 = centerY - (radiusH * Math.cos(teta));
+
+            //dc.drawLine(x1.toNumber(), y1.toNumber(), x2.toNumber(), y2.toNumber());
+            dc.drawCircle(x1.toNumber(), y1.toNumber(), 10);
+            System.println(second + " " + x1 + " " + y1 + " " + x2 + " " + y2);
         }
+        dc.drawLine(10, 50, 10 + second.toNumber() , 55);
+        var screenWidth = dc.getWidth();
+        var screenHeight = dc.getHeight();
+        System.println(30 + screenWidth + " " + screenHeight);
+
         view.setText(timeString);
         view.setColor(Graphics.COLOR_RED);
         // Call the parent onUpdate function to redraw the layout
