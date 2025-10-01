@@ -35,8 +35,9 @@ class MyWatchFaceView extends WatchUi.WatchFace {
         // view.setText(timeString);
         // view.setColor(Graphics.COLOR_RED);
         // Call the parent onUpdate function to redraw the layout
+        drawNumbers(dc);
         View.onUpdate(dc);
-
+        
         drawTrot(dc, clockTime);
     }
 
@@ -44,6 +45,21 @@ class MyWatchFaceView extends WatchUi.WatchFace {
     // state of this View here. This includes freeing resources from
     // memory.
     function onHide() as Void {
+    }
+
+    public function drawNumbers(dc) as Void {
+        for (var i = 1; i <= 12 ; i = i + 1) {
+            var charView = View.findDrawableById("HourChar" + i) as Text;
+            var hour = Lang.format("$1$", [i]);
+
+            var teta = (2 * Math.PI / 12) * i;
+            var radius = 160;
+            var x =  (dc.getWidth()/2) + (radius * Math.sin(teta));
+            var y = (dc.getHeight()/2) - (radius * Math.cos(teta)) - 25;
+            charView.setText(hour);
+            charView.setLocation(x.toNumber() , y.toNumber() );
+            //dc.drawCircle(x.toNumber(), y.toNumber(), 3);
+        }
     }
 
     public function drawTrot(dc, clockTime) as Void {
@@ -58,12 +74,12 @@ class MyWatchFaceView extends WatchUi.WatchFace {
             teta = (2 * Math.PI / 60) * i;
             if (i % 5 == 0) {
                  dc.setColor(Graphics.COLOR_DK_BLUE, Graphics.COLOR_BLACK);
-                radiusG = 180;
-                radiusH = 195;
+                radiusG = 200;
+                radiusH = 210;
             } else {
                  dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_BLACK);
-                radiusG = 185;
-                radiusH = 195;
+                radiusG = 205;
+                radiusH = 210;
             }
             var x1 = centerX + (radiusG * Math.sin(teta));
             var y1 = centerY - (radiusG * Math.cos(teta));
@@ -85,11 +101,11 @@ class MyWatchFaceView extends WatchUi.WatchFace {
             var xhou = centerX + ((radiusG - 100) * Math.sin(tetahour));
             var yhou = centerY - ((radiusG - 100) * Math.cos(tetahour));
 
-            dc.setColor(Graphics.COLOR_DK_BLUE, Graphics.COLOR_BLACK);
+            dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_BLACK);
             dc.drawLine(centerX, centerY, xsec.toNumber(), ysec.toNumber());    
             dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_BLACK);
             dc.drawLine(centerX, centerY, xmin.toNumber(), ymin.toNumber());
-            dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_BLACK);
+            dc.setColor(Graphics.COLOR_DK_BLUE, Graphics.COLOR_BLACK);
             dc.drawLine(centerX, centerY, xhou.toNumber(), yhou.toNumber());
     }
 
