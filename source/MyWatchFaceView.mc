@@ -2,15 +2,29 @@ import Toybox.Graphics;
 import Toybox.Lang;
 import Toybox.System;
 import Toybox.WatchUi;
+import Toybox.Activity;
+import Toybox.System;
 
 class MyWatchFaceView extends WatchUi.WatchFace {
     var radiusG = 190;
     var radiusH = 195;
     var teta = 0.0;
+    var xcenter = 0.0;
+    var ycenter = 0.0;
 
     function initialize() {
         WatchFace.initialize();
+        // Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
+        // Sensor.enableSensorEvents(method(:onSensor));
     }
+
+    // function onSensor(info as Sensor.Info) as Void {
+    //     var heartrate = View.findDrawableById("HeartRate") as Text;
+
+    //     heartrate.setLocation(xcenter ,ycenter + 50);
+    //     heartrate.setText(Lang.format("$1$", [info.heartRate]));
+    // }
+
 
     // Load your resources here
     function onLayout(dc as Dc) as Void {
@@ -27,15 +41,25 @@ class MyWatchFaceView extends WatchUi.WatchFace {
     function onUpdate(dc as Dc) as Void {
         
         var clockTime = System.getClockTime();
+        xcenter =  dc.getWidth()/2;
+        ycenter =  dc.getHeight()/2;
         // var timeString = Lang.format("$1$:$2$", [clockTime.hour, clockTime.min.format("%02d")]);
         // var view = View.findDrawableById("TimeLabel") as Text;
         // var second = Lang.format("$1$", [clockTime.sec]);
-        
-
+    
         // view.setText(timeString);
         // view.setColor(Graphics.COLOR_RED);
         // Call the parent onUpdate function to redraw the layout
         drawNumbers(dc);
+        var heartrate = View.findDrawableById("HeartRate") as Text;
+
+        heartrate.setLocation(xcenter ,ycenter + 50);
+        var hr = Lang.format("$1$", [Activity.getActivityInfo().currentHeartRate]);
+        if ((hr == "null") or (hr == "0")){ 
+            heartrate.setText("--");
+        }else{
+            heartrate.setText(hr);
+        }
         View.onUpdate(dc);
         
         drawTrot(dc, clockTime);
@@ -57,6 +81,7 @@ class MyWatchFaceView extends WatchUi.WatchFace {
             var x =  (dc.getWidth()/2) + (radius * Math.sin(teta));
             var y = (dc.getHeight()/2) - (radius * Math.cos(teta)) - 25;
             charView.setText(hour);
+            charView.setColor(Graphics.COLOR_YELLOW);
             charView.setLocation(x.toNumber() , y.toNumber() );
             //dc.drawCircle(x.toNumber(), y.toNumber(), 3);
         }
@@ -73,11 +98,11 @@ class MyWatchFaceView extends WatchUi.WatchFace {
             // charView.setColor(Graphics.COLOR_BLUE);
             teta = (2 * Math.PI / 60) * i;
             if (i % 5 == 0) {
-                 dc.setColor(Graphics.COLOR_DK_BLUE, Graphics.COLOR_BLACK);
+                 dc.setColor(Graphics.COLOR_YELLOW, Graphics.COLOR_BLACK);
                 radiusG = 200;
                 radiusH = 210;
             } else {
-                 dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_BLACK);
+                 dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_BLACK);
                 radiusG = 205;
                 radiusH = 210;
             }
@@ -85,10 +110,8 @@ class MyWatchFaceView extends WatchUi.WatchFace {
             var y1 = centerY - (radiusG * Math.cos(teta));
             var x2 = centerX + (radiusH * Math.sin(teta));
             var y2 = centerY - (radiusH * Math.cos(teta));
-
            
             dc.drawLine(x1.toNumber(), y1.toNumber(), x2.toNumber(), y2.toNumber());
-           
             //dc.drawCircle(x1.toNumber(), y1.toNumber(), 3);
         }
             var tetasecond = (2 * Math.PI / 60) * clockTime.sec;
@@ -103,9 +126,9 @@ class MyWatchFaceView extends WatchUi.WatchFace {
 
             dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_BLACK);
             dc.drawLine(centerX, centerY, xsec.toNumber(), ysec.toNumber());    
-            dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_BLACK);
+            dc.setColor(Graphics.COLOR_YELLOW, Graphics.COLOR_BLACK);
             dc.drawLine(centerX, centerY, xmin.toNumber(), ymin.toNumber());
-            dc.setColor(Graphics.COLOR_DK_BLUE, Graphics.COLOR_BLACK);
+            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
             dc.drawLine(centerX, centerY, xhou.toNumber(), yhou.toNumber());
     }
 
