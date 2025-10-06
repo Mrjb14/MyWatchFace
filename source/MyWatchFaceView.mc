@@ -72,7 +72,7 @@ class MyWatchFaceView extends WatchUi.WatchFace {
             speedDisplay.setText(speed);
         }
 
-        //SPEED
+        //LOCATION
         var LocationDisplay = View.findDrawableById("Location") as Text;
         var location = Lang.format("$1$", [Activity.getActivityInfo().currentLocation]);
         LocationDisplay.setLocation(xcenter,ycenter- 50);
@@ -163,3 +163,4 @@ class MyWatchFaceView extends WatchUi.WatchFace {
     }
 
 }
+
