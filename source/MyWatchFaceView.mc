@@ -51,6 +51,8 @@ class MyWatchFaceView extends WatchUi.WatchFace {
         // view.setColor(Graphics.COLOR_RED);
         // Call the parent onUpdate function to redraw the layout
         drawNumbers(dc);
+
+        //HEARTRATE
         var heartrate = View.findDrawableById("HeartRate") as Text;
 
         heartrate.setLocation(xcenter ,ycenter + 50);
@@ -60,6 +62,26 @@ class MyWatchFaceView extends WatchUi.WatchFace {
         }else{
             heartrate.setText(hr);
         }
+        //SPEED
+        var speedDisplay = View.findDrawableById("Speed") as Text;
+        var speed = Lang.format("$1$", [Activity.getActivityInfo().currentSpeed.toFloat().format("%0.2f")]);
+        speedDisplay.setLocation(xcenter ,ycenter);
+        if ((speed == "null") or (speed == "0.000000")){ 
+            speedDisplay.setText("--"); 
+        }else{
+            speedDisplay.setText(speed);
+        }
+
+        //SPEED
+        var LocationDisplay = View.findDrawableById("Location") as Text;
+        var location = Lang.format("$1$", [Activity.getActivityInfo().currentLocation]);
+        LocationDisplay.setLocation(xcenter,ycenter- 50);
+        if ((location == "null") or (location == "0.000000")){ 
+            LocationDisplay.setText("--"); 
+        }else{
+            LocationDisplay.setText(location);
+        }
+
         View.onUpdate(dc);
         
         drawTrot(dc, clockTime);
