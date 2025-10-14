@@ -1,20 +1,23 @@
-# Ignore build output
+# Garmin Connect IQ build artifacts
 bin/
-# Ignore generated files
-*.mcgen
-*.mir
-*.mbc
+gen/
+internal-mir/
+mir/
+*.prg
+*.prg.debug.xml
 
-# Ignore IDE/project files (if any)
-*.iml
-.idea/
-.vscode/
-
-# Ignore OS-specific files
-.DS_Store
-Thumbs.db
-
-# Ignore logs
+# Temporary files
+nul
+*.tmp
 *.log
 
-# ...add other patterns as needed for your environment
+# IDE specific
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS specific
+.DS_Store
+Thumbs.db
