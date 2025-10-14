@@ -3,7 +3,7 @@ import Toybox.Lang;
 import Toybox.System;
 import Toybox.WatchUi;
 import Toybox.Activity;
-import Toybox.System;
+import Toybox.ActivityMonitor;
 
 class MyWatchFaceView extends WatchUi.WatchFace {
     var radiusG = 190;
@@ -11,20 +11,11 @@ class MyWatchFaceView extends WatchUi.WatchFace {
     var teta = 0.0;
     var xcenter = 0.0;
     var ycenter = 0.0;
+    var myLocation as Array<Double> = [0.0d, 0.0d] as Array<Double>;
 
     function initialize() {
         WatchFace.initialize();
-        // Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
-        // Sensor.enableSensorEvents(method(:onSensor));
     }
-
-    // function onSensor(info as Sensor.Info) as Void {
-    //     var heartrate = View.findDrawableById("HeartRate") as Text;
-
-    //     heartrate.setLocation(xcenter ,ycenter + 50);
-    //     heartrate.setText(Lang.format("$1$", [info.heartRate]));
-    // }
-
 
     // Load your resources here
     function onLayout(dc as Dc) as Void {
@@ -62,24 +53,29 @@ class MyWatchFaceView extends WatchUi.WatchFace {
         }else{
             heartrate.setText(hr);
         }
-        //SPEED
+        //SPEED (convert from m/s to km/h)
         var speedDisplay = View.findDrawableById("Speed") as Text;
-        var speed = Lang.format("$1$", [Activity.getActivityInfo().currentSpeed.toFloat().format("%0.2f")]);
         speedDisplay.setLocation(xcenter ,ycenter);
-        if ((speed == "null") or (speed == "0.000000")){ 
-            speedDisplay.setText("--"); 
-        }else{
-            speedDisplay.setText(speed);
+        var currentSpeed = Activity.getActivityInfo().currentSpeed;
+        if (currentSpeed == null || currentSpeed == 0) {
+            speedDisplay.setText("--");
+        } else {
+            var speedKmh = currentSpeed * 3.6; // Convert m/s to km/h
+            speedDisplay.setText(speedKmh.format("%.1f") + " km/h");
         }
 
-        //SPEED
+        //LOCATION
         var LocationDisplay = View.findDrawableById("Location") as Text;
-        var location = Lang.format("$1$", [Activity.getActivityInfo().currentLocation]);
-        LocationDisplay.setLocation(xcenter,ycenter- 50);
-        if ((location == "null") or (location == "0.000000")){ 
-            LocationDisplay.setText("--"); 
-        }else{
-            LocationDisplay.setText(location);
+        LocationDisplay.setLocation(xcenter, ycenter - 50);
+
+        var activityInfo = Activity.getActivityInfo();
+        if (activityInfo != null && activityInfo has :currentLocation && activityInfo.currentLocation != null) {
+            var location = activityInfo.currentLocation.toDegrees();
+            var lat = location[0] as Double;
+            var lon = location[1] as Double;
+            LocationDisplay.setText(lat.format("%.4f") + "," + lon.format("%.4f"));
+        } else {
+            LocationDisplay.setText("GPS: --");
         }
 
         View.onUpdate(dc);
