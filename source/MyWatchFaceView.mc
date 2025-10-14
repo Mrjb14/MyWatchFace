@@ -12,7 +12,6 @@ class MyWatchFaceView extends WatchUi.WatchFace {
     var teta = 0.0;
     var xcenter = 0.0;
     var ycenter = 0.0;
-    var myLocation as Array<Double> = [0.0d, 0.0d] as Array<Double>;
 
     function initialize() {
         WatchFace.initialize();
@@ -21,12 +20,6 @@ class MyWatchFaceView extends WatchUi.WatchFace {
     // Load your resources here
     function onLayout(dc as Dc) as Void {
         setLayout(Rez.Layouts.WatchFace(dc));
-    }
-
-    // Called when this View is brought to the foreground. Restore
-    // the state of this View and prepare it to be shown. This includes
-    // loading resources into memory.
-    function onShow() as Void {
     }
 
     // Update the view
@@ -52,12 +45,6 @@ class MyWatchFaceView extends WatchUi.WatchFace {
         drawSportData(dc);
         drawDataIcons(dc);
         drawAdditionalData(dc);
-    }
-
-    // Called when this View is removed from the screen. Save the
-    // state of this View here. This includes freeing resources from
-    // memory.
-    function onHide() as Void {
     }
 
     // Draw dark sporty background with concentric circles
@@ -234,7 +221,6 @@ class MyWatchFaceView extends WatchUi.WatchFace {
         var centerX = dc.getWidth() / 2;
         var centerY = dc.getHeight() / 2;
 
-        var sportBlue = 0x00A3E0;
         var lightBlue = 0x5CC7E8;
         var whiteColor = Graphics.COLOR_WHITE;
         var lightGray = 0xB0B0B0;
@@ -288,8 +274,6 @@ class MyWatchFaceView extends WatchUi.WatchFace {
         var centerY = dc.getHeight() / 2;
         var sportBlue = 0x00A3E0;
         var lightBlue = 0x5CC7E8;
-        var lightGray = 0xB0B0B0;
-        var darkGray = 0x606060;
 
         // Battery indicator (left side, moved higher)
         var stats = System.getSystemStats();
@@ -351,14 +335,6 @@ class MyWatchFaceView extends WatchUi.WatchFace {
 
         dc.setColor(sportBlue, Graphics.COLOR_TRANSPARENT);
         dc.drawText(centerX, centerY + 100, Graphics.FONT_XTINY, dateString, Graphics.TEXT_JUSTIFY_CENTER);
-    }
-
-    // The user has just looked at their watch. Timers and animations may be started here.
-    function onExitSleep() as Void {
-    }
-
-    // Terminate any active timers and prepare for slow updates.
-    function onEnterSleep() as Void {
     }
 
 }
